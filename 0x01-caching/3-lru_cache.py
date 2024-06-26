@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""cahce"""
+'''Task 3: LRU Caching
+'''
 
 
 from collections import OrderedDict
@@ -7,15 +8,19 @@ from base_caching import BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """class LRUCache"""
+    '''A class `LRUCache` that inherits from
+       `BaseCaching` and is a caching system
+    '''
 
     def __init__(self):
-        """initialise cache"""
+        '''initialize the cache
+        '''
         super().__init__()
         self.cache_data = OrderedDict()
 
     def put(self, key, item):
-        """Add item"""
+        """Adds an item in the cache.
+        """
         if key is None or item is None:
             return
         if key not in self.cache_data:
@@ -28,7 +33,8 @@ class LRUCache(BaseCaching):
             self.cache_data[key] = item
 
     def get(self, key):
-        """Get item"""
+        """Retrieves an item by key.
+        """
         if key is not None and key in self.cache_data:
             self.cache_data.move_to_end(key, last=False)
         return self.cache_data.get(key, None)

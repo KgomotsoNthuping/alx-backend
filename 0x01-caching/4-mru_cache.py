@@ -1,20 +1,29 @@
 #!/usr/bin/python3
-"""cache"""
+"""4-mru_cache.py
+"""
 from threading import RLock
 
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class MRUCache(BaseCaching):
-    """implementation of MRU"""
+    """
+    An implementation of MRU(Most Recently Used) Cache
+
+    Attributes:
+        __keys (list): Stores cache keys from least to most accessed
+        __rlock (RLock): Lock accessed resources to prevent race condition
+    """
     def __init__(self):
-        """Instantiate method"""
+        """ Instantiation method, sets instance attributes
+        """
         super().__init__()
         self.__keys = []
         self.__rlock = RLock()
 
     def put(self, key, item):
-        """Add item"""
+        """ Add an item in the cache
+        """
         if key is not None and item is not None:
             keyOut = self._balance(key)
             with self.__rlock:
@@ -23,7 +32,8 @@ class MRUCache(BaseCaching):
                 print('DISCARD: {}'.format(keyOut))
 
     def get(self, key):
-        """Get item"""
+        """ Get an item by key
+        """
         with self.__rlock:
             value = self.cache_data.get(key, None)
             if key in self.__keys:
@@ -31,7 +41,8 @@ class MRUCache(BaseCaching):
         return value
 
     def _balance(self, keyIn):
-        """Remove earliest item"""
+        """ Removes the earliest item from the cache at MAX size
+        """
         keyOut = None
         with self.__rlock:
             keysLength = len(self.__keys)
